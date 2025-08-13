@@ -1,22 +1,25 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
-  const [user, setUser] = useState(null); 
-
   return (
     <Router>
       <Routes>
-        <Route path='/signup' element={<Signup setUser={setUser}/>}/>
-        <Route path="/login" element={<Login setUser={setUser} />} />
-        <Route 
-          path="/" 
-          element={user ? <Home user={user} /> : <Navigate to="/login" />} 
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } 
         />
       </Routes>
     </Router>
   );
 }
+ 

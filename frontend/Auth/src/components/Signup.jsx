@@ -48,6 +48,10 @@ export default function Signup({ setUser }) {
     }
   };
 
+  const handleLclick = ()=>{
+    navigate('/login')
+  }
+
   return (
     <div style={{ textAlign: 'center', marginTop: '100px' }}>
       <h2>Signup</h2>
@@ -77,6 +81,8 @@ export default function Signup({ setUser }) {
       /><br /><br />
 
       <button onClick={handleSignup}>Signup</button>
+      <br />
+      <button onClick={handleLclick}>Login</button>
     </div>
   );
 }

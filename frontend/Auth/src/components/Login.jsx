@@ -16,34 +16,33 @@ export default function Login({ setUser }) {
   };
 
   const handleLogin = async () => {
-    const { email, password } = formData;
-    if (!email || !password) {
-      alert('Please fill in all fields');
-      return;
+  const { email, password } = formData;
+  if (!email || !password) {
+    alert('Please fill in all fields');
+    return;
+  }
+
+  try {
+    const res = await fetch('http://localhost:3000/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      if (setUser) setUser({ name: data.data.name, email: data.data.email });
+      navigate('/');
+    } else {
+      alert(data.message || 'Login failed');
     }
-
-    try {
-      const res = await fetch('http://localhost:3000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password }) // FIXED: JSON.stringify
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) { // FIXED: use res instead of response
-        setUser({ name: data.data.name, email: data.data.email }); // match backend
-        navigate('/');
-      } else {
-        alert(data.message || 'Login failed'); // FIXED: correct wording
-      }
-    } catch (error) {
-      console.error('Error logging in:', error);
-      alert('Error logging in');
-    }
-  };
+  } catch (error) {
+    console.error('Error logging in:', error);
+    alert(error.message || 'Error logging in');
+  }
+};
 
   return (
     <div style={{ textAlign: 'center', marginTop: '100px' }}>
